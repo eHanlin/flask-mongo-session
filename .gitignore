@@ -1,2 +1,4 @@
 *.swp
 *.pyc
+dist
+flask_mongo_session.egg-info

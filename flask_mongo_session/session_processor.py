@@ -109,7 +109,7 @@ class MongoSessionProcessor(object):
         if len(set_query.keys()):
             doc['$set'] = set_query
 
-        if len(unset_query.keys() + set_query.keys()): self.__db.Session.update(dict(_id = session_id), doc, upsert = True)
+        if len(unset_query.keys()) + len(set_query.keys()): self.__db.Session.update(dict(_id = session_id), doc, upsert = True)
 
         session.reset_modified_keys() 
 

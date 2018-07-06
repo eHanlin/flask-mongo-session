@@ -32,7 +32,13 @@ class MongoSessionProcessor(object):
 
     def save_session(self, app, session, response):
         session_id = session.get_id()
-        self.__db.Session.update(dict(_id = session_id), {'$set':session}, upsert = True)
+
+        if len(session.keys()):
+            doc = {'$set':session}
+        else:
+            doc = session
+            
+        self.__db.Session.update(dict(_id = session_id), doc, upsert = True)
         response.set_cookie(app.session_cookie_name, session_id)
 
     def is_null_session(self, session):

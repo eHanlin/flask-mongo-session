@@ -22,7 +22,7 @@ class MongoSessionProcessor(object):
         session_id = request.cookies.get(session_cookie_name)
 
         if session_id:
-            data = self.__db.find_one(dict(_id = session_id)) or dict()
+            data = self.__db.Session.find_one(dict(_id = session_id)) or dict()
             session = Session(session_id)
             session.update(data)
         else:
@@ -32,7 +32,7 @@ class MongoSessionProcessor(object):
 
     def save_session(self, app, session, response):
         session_id = session.get_id()
-        self.__db.update(dict(_id = session_id), {'$set':session}, upsert = True)
+        self.__db.Session.update(dict(_id = session_id), {'$set':session}, upsert = True)
         response.set_cookie(app.session_cookie_name, session_id)
 
     def is_null_session(self, session):

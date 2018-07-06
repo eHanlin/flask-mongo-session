@@ -13,7 +13,7 @@ pip install flask-mongo-session
 
 Set flask's `session_interface` using `MongoSessionProcessor`.
 
-```sh
+```py
 from flask_mongo_session.session_processor import MongoSessionProcessor
 from flask import Flask
 

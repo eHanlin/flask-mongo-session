@@ -11,7 +11,7 @@ class Session(dict, SessionMixin):
 
     def get_id(self): return self.__id
 
-class MemcachedSessionProcessor(object):
+class MongoSessionProcessor(object):
 
     def __init__(self, host):
         self.__client = MongoClient(host)

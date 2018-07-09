@@ -5,7 +5,7 @@ except:
     from distutils.core import setup, find_packages
  
 setup(name='flask-mongo-session',
-      version='1.1.0',
+      version='1.2.0',
       description='Use mongo db as session.',
       author='Sparrow Jang',
       author_email='sparrow.jang@gmail.com',

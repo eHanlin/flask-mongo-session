@@ -1,7 +1,10 @@
 
 from flask.sessions import SessionMixin, SessionInterface
 from pymongo import MongoClient
+from datetime import datetime
+import time
 import uuid
+import bson
 
 
 class Session(dict, SessionMixin):
@@ -109,7 +112,16 @@ class MongoSessionProcessor(object):
         if len(set_query.keys()):
             doc['$set'] = set_query
 
-        if len(unset_query.keys()) + len(set_query.keys()): self.__db.Session.update(dict(_id = session_id), doc, upsert = True)
+        if len(unset_query.keys()) + len(set_query.keys()):
+            set_query = doc.get('$set') or dict()
+            now_date = bson.Int64(time.mktime(datetime.now().timetuple()) * 1000)
+
+            if not(set_query.get('_createDate')): set_query['_createDate'] = now_date
+
+            set_query['_lastUpdateDate'] = now_date
+            doc['$set'] = set_query
+
+            self.__db.Session.update(dict(_id = session_id), doc, upsert = True)
 
         session.reset_modified_keys() 
 

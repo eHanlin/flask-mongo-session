@@ -73,16 +73,17 @@ class Session(dict, SessionMixin):
 
 class MongoSessionProcessor(object):
 
-    def __init__(self, host):
+    def __init__(self, host, collection = 'session'):
         self.__client = MongoClient(host)
         self.__db = self.__client.get_default_database()
+        self.__collection = self.__db[collection]
 
     def open_session(self, app, request):
         session_cookie_name = app.session_cookie_name
         session_id = request.cookies.get(session_cookie_name)
 
         if session_id:
-            data = self.__db.Session.find_one(dict(_id = session_id)) or dict()
+            data = self.__collection.find_one(dict(_id = session_id)) or dict()
             session = Session(session_id)
             session.update(data)
         else:
@@ -121,7 +122,7 @@ class MongoSessionProcessor(object):
             set_query['_lastUpdateDate'] = now_date
             doc['$set'] = set_query
 
-            self.__db.Session.update(dict(_id = session_id), doc, upsert = True)
+            self.__collection.update(dict(_id = session_id), doc, upsert = True)
 
         session.reset_modified_keys() 
 
